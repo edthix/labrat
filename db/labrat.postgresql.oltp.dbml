@@ -1,0 +1,84 @@
+table users {
+  id int
+  email varcharacter [unique, not null]
+  full_name varcharacter [not null]
+  password varcharacter [not null]
+  description text
+  status enum(active/banned) [default: "active"]
+  role enum(admin,normal) [default: "normal"]
+  created_at timestamp
+  updated_at timestamp
+  deleted_at timestamp
+  created_by int
+  updated_by int
+  deleted_by int
+
+  indexes {
+    id [pk]
+    email [unique]
+    full_name
+
+    status
+    created_at
+    updated_at
+    deleted_at
+  }
+}
+
+table posts {
+  id int
+
+  title varcharacter [not null]
+  body text
+
+  created_at timestamp
+  updated_at timestamp
+  deleted_at timestamp
+  created_by int
+  updated_by int
+  deleted_by int
+
+  indexes {
+    id [pk]
+    title
+
+    created_at
+    updated_at
+    deleted_at
+  }
+}
+
+table post_likes {
+  id int [pk]
+
+  user_id int
+  post_id int
+
+  created_at timestamp
+  updated_at timestamp
+  deleted_at timestamp
+  created_by int
+  updated_by int
+  deleted_by int
+
+  indexes {
+    id [pk]
+    (user_id, post_id) [unique]
+
+    created_at
+    updated_at
+    deleted_at
+  }
+}
+
+Ref: posts.id < post_likes.post_id
+Ref: users.id < post_likes.user_id
+Ref: users.id < users.created_by
+Ref: users.id < users.updated_by
+Ref: users.id < users.deleted_by
+Ref: users.id < posts.created_by
+Ref: users.id < posts.updated_by
+Ref: users.id < posts.deleted_by
+Ref: users.id < post_likes.created_by
+Ref: users.id < post_likes.updated_by
+Ref: users.id < post_likes.deleted_by
